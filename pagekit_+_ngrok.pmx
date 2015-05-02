@@ -1,0 +1,32 @@
+---
+name: Pagekit + ngrok
+description: ''
+keywords: ''
+type: Default
+documentation: |-
+  Add **MYSQL_ROOT_PASSWORD** and **MYSQL_DATABASE** environment variables to *orchardup_mysql_latest* container.
+
+  Optionally add database *Volume* to be mounted from host (Panamax) virtual machine.
+
+  Refer to [https://www.andrewmunsell.com/blog/getting-started-with-panamax](https://www.andrewmunsell.com/blog/getting-started-with-panamax) for more detailed intructions.
+images:
+- name: orchardup_mysql_latest
+  source: orchardup/mysql:latest
+  category: DB Tier
+  type: Default
+- name: marksteve_pagekit
+  source: marksteve/pagekit:latest
+  category: App Tier
+  type: Default
+  expose:
+  - '80'
+  links:
+  - service: orchardup_mysql_latest
+    alias: mysql
+- name: wizardapps_ngrok
+  source: wizardapps/ngrok:latest
+  category: Proxy Tier
+  type: Default
+  links:
+  - service: marksteve_pagekit
+    alias: APP
